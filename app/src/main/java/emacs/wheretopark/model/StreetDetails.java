@@ -24,7 +24,6 @@ public class StreetDetails {
         this.nameOfTheStreat = nameOfTheStreat;
     }
 
-
     public Map<String, Boolean> getShopsList() {
         return shopsList;
     }

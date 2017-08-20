@@ -35,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:onClick="@{() -> presenter.landmarkTowarsLeft()}"
-                android:text="Left" />
+                android:text="@string/left" />
 
             <Button
                 android:id="@+id/landmarkTowardsRight"
@@ -45,7 +45,7 @@
                 android:layout_toEndOf="@+id/landmarkTowardsLeft"
                 android:layout_toRightOf="@+id/landmarkTowardsLeft"
                 android:onClick="@{() -> presenter.landmarkTowarsRight()}"
-                android:text="Right" />
+                android:text="@string/right" />
 
             <Button
                 android:id="@+id/skipToNextQuestion"
@@ -55,7 +55,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/landmarkTowardsRight"
                 android:onClick="@{() -> presenter.SkipToNextQuestion()}"
-                android:text="Skip" />
+                android:text="@string/dont_know" />
 
         </RelativeLayout>
 

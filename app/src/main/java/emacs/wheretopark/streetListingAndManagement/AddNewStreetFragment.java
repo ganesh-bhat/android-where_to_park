@@ -1,9 +1,6 @@
-package emacs.wheretopark;
+package emacs.wheretopark.fragments;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,18 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import emacs.wheretopark.MainActivity;
+import emacs.wheretopark.R;
 import emacs.wheretopark.databinding.FragmentAddNewStreeetBinding;
 import emacs.wheretopark.databinding.NewLandmarkItemBinding;
+import emacs.wheretopark.engine.ParkingComputeEngine;
+import emacs.wheretopark.model.StreetDetails;
+import emacs.wheretopark.storage.BackendStorage;
 
 /**
  * Created by ganbhat on 7/3/2017.
@@ -43,9 +41,7 @@ public class AddNewStreetFragment extends Fragment {
     private FragmentAddNewStreeetBinding binding;
 
     public AddNewStreetFragment(){
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +74,7 @@ public class AddNewStreetFragment extends Fragment {
 
     List<NewLandmarkItemBinding> landmarkBindings = new ArrayList<>();
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -91,6 +88,8 @@ public class AddNewStreetFragment extends Fragment {
                 landmarkBindings.add(landmarkItemBinding);
             }
         });
+
+
     }
 
     public StreetDetails getStreetDetails() {
@@ -108,7 +107,7 @@ public class AddNewStreetFragment extends Fragment {
         for(NewLandmarkItemBinding binding:landmarkBindings) {
             String landmarkName = binding.landmarkName.getText().toString();
             boolean isLandmarkTowardsRight = binding.isLandmarkTowardsRight.isChecked();
-            boolean isLandmarkParkingAllowedOnEvenDay = isLandmarkParkingAllowedOnEvenDay(isLandmarkTowardsRight,isRightSideParking,isEvenDateToday);
+            boolean isLandmarkParkingAllowedOnEvenDay = ParkingComputeEngine.isLandmarkParkingAllowedOnEvenDay(isLandmarkTowardsRight,isRightSideParking,isEvenDateToday);
             landmarksList.put(landmarkName,isLandmarkParkingAllowedOnEvenDay);
         }
 
@@ -118,33 +117,7 @@ public class AddNewStreetFragment extends Fragment {
         return  streetDetails;
     }
 
-    private boolean isLandmarkParkingAllowedOnEvenDay(boolean isLandmarkTowardsRight, boolean isRightSideParking,boolean isEvenDateToday) {
-        String landmarkParkingAllowedDay = null;
-        if(isLandmarkTowardsRight && isRightSideParking && isEvenDateToday) {
-                /* landmark right, right side parking, today even day */
-            landmarkParkingAllowedDay = "EVEN"; // parking infront on Even day allowed
-        } else if(isLandmarkTowardsRight && !isRightSideParking && !isEvenDateToday) {
-                /* landmark right, left side parking, on odd day */
-            landmarkParkingAllowedDay = "EVEN"; // on even day, parking infront of landmark allowed
-        }else if(isLandmarkTowardsRight && isRightSideParking && !isEvenDateToday) {
-                /* landmark is right, parking is right side, on odd day */
-            landmarkParkingAllowedDay = "ODD"; // odd day parking infront of landmark
-        }else if(!isLandmarkTowardsRight && isRightSideParking && isEvenDateToday) {
-            landmarkParkingAllowedDay = "ODD";
-        }else if(!isLandmarkTowardsRight && isRightSideParking && !isEvenDateToday) {
-            landmarkParkingAllowedDay = "EVEN";
 
-        }else if(!isLandmarkTowardsRight && !isRightSideParking && !isEvenDateToday) {
-            landmarkParkingAllowedDay = "ODD";
-
-        }else if(isLandmarkTowardsRight && !isRightSideParking && isEvenDateToday) {
-            landmarkParkingAllowedDay = "ODD";
-
-        }else if(!isLandmarkTowardsRight && !isRightSideParking && isEvenDateToday) {
-            landmarkParkingAllowedDay = "EVEN";
-        }
-        return "EVEN".equals(landmarkParkingAllowedDay);
-    }
 
     class StreetAdderTask extends AsyncTask<Void,Void,Void> {
 
@@ -158,7 +131,7 @@ public class AddNewStreetFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),"Saving..","Please wait while we save your preference",true,false);
+            progressDialog = ProgressDialog.show(getActivity(),getString(R.string.add_street_message_title),getString(R.string.street_adding_progress_message),true,false);
         }
 
         @Override
@@ -166,24 +139,12 @@ public class AddNewStreetFragment extends Fragment {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
             getActivity().getSupportFragmentManager().popBackStack();
+            ((MainActivity)(getActivity())).fragmentWorkDone();//TODO use an interface instead
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            SharedPreferences sp = getActivity().getSharedPreferences(STREET_NAME, Context.MODE_APPEND);
-            List<StreetDetails> streetDetailsList = null;
-            Gson gson = new Gson();
-            if(sp.contains(STREET_LIST)) {
-                String streetListJson = sp.getString(STREET_LIST,null);
-                Type listType = new TypeToken<List<StreetDetails>>() {}.getType();
-                streetDetailsList = gson.fromJson(streetListJson, listType);
-            } else {
-                streetDetailsList = new ArrayList<>();
-            }
-            streetDetailsList.add(mStreetDetails);//add new one
-            String newJson = gson.toJson(streetDetailsList);
-            Log.i(LOG_TAG,"Street List JSON:"+newJson);
-            sp.edit().putString(STREET_LIST,newJson).commit();
+            BackendStorage.BACKEND_STORAGE.addNewStreet(mStreetDetails);
             return null;
         }
 
