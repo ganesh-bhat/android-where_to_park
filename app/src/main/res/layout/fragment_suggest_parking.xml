@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable name="presenter" type="emacs.wheretopark.SuggestParkingFragment" />
+    </data>
+
+    <LinearLayout
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <RelativeLayout
+            android:id="@+id/landmarkQuestionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="132dp">
+
+            <TextView
+                android:id="@+id/landmarkQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/landmarkTowardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:onClick="@{() -> presenter.landmarkTowarsLeft()}"
+                android:text="Left" />
+
+            <Button
+                android:id="@+id/landmarkTowardsRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/landmarkTowardsLeft"
+                android:layout_toEndOf="@+id/landmarkTowardsLeft"
+                android:layout_toRightOf="@+id/landmarkTowardsLeft"
+                android:onClick="@{() -> presenter.landmarkTowarsRight()}"
+                android:text="Right" />
+
+            <Button
+                android:id="@+id/skipToNextQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/landmarkTowardsRight"
+                android:onClick="@{() -> presenter.SkipToNextQuestion()}"
+                android:text="Skip" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/landmarkQuestionAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/parkingSuggestion"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+
+                android:textSize="24sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

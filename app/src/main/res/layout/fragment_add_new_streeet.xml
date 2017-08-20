@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/streetNameEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Street Name" />
+
+            <TextView
+                android:id="@+id/landmarksLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop/Landmarks" />
+
+            <LinearLayout
+                android:id="@+id/landmarksContainer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include layout="@layout/new_landmark_item"/>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/add_new_landmark_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editText2"
+                android:layout_centerHorizontal="true"
+                android:text="Add" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp">
+
+                <TextView
+                    android:id="@+id/todayParkingAtLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="80dp"
+                    android:layout_marginRight="80dp"
+                    android:ems="10"
+                    android:text="Today Parking At" />
+
+                <ToggleButton
+                    android:id="@+id/rightSideParkingToggle"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="todayParkingToggle"
+                    android:checked="true"
+                    android:textOff="Left"
+                    android:textOn="Right" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp">
+
+                <TextView
+                    android:id="@+id/isEvenOddRuleLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="80dp"
+                    android:layout_marginRight="80dp"
+                    android:ems="10"
+                    android:text="Is Even Odd Rule?" />
+
+                <ToggleButton
+                    android:id="@+id/isEvenOddRuleToggle"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="isEvenOddRuleToggle"
+                    android:checked="true"
+                    android:textOff="No"
+                    android:textOn="Yes" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>
